@@ -19,6 +19,9 @@ class AuthController
             $file = "{$base_dir}Vue{$ds}dashboard.php";
             header($file);
            }
+           else{
+            echo "<div class='alert alert-danger'> Informations incorrectes !</div>";
+           }
 
         }
 
