@@ -36,4 +36,13 @@ class AuthController
 
     }
 
+    function Bienvenue()
+    {
+        $ds = DIRECTORY_SEPARATOR;
+        $base_dir = realpath(dirname(__FILE__)  . $ds . '..') . $ds ;
+        $file = "{$base_dir}Vue{$ds}Accueil.php";
+        include($file);
+
+    }
+
 }

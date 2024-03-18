@@ -13,5 +13,10 @@ elseif ($_SERVER["REQUEST_URI"]=="/inscription") {
     $controller -> inscription();
       
 }
+elseif ($_SERVER["REQUEST_URI"]=="/") {
+    $controller -> Bienvenue();
+
+}
+
 
 ?>
