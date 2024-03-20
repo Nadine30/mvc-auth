@@ -1,8 +1,16 @@
 <?php
+$ds = DIRECTORY_SEPARATOR;
+$base_dir = realpath(dirname(__FILE__)  . $ds . '..') . $ds ;
+$file = "{$base_dir}Model{$ds}Utilisateur.php";
+require $file;
+
 class AuthController
 {
-    function __construct(){
-          
+    protected $user;
+
+    function __construct()
+    {
+        $this->user = new Utilisateur(); 
     }
 
     function connexion()
@@ -14,7 +22,11 @@ class AuthController
         
         if ($_SERVER["REQUEST_METHOD"]=="POST")
         {
-           if ($_POST["emailUtilisateur" ]=="ken@gmail.com" and $_POST["motDePasseUtilisateur"]=="nado32")
+            $email=$_POST["emailUtilisateur"];
+            $mdp=$_POST["motDePasseUtilisateur"];
+
+            if ($this->user->search($email) and $this->user->verify($mdp,$email))
+        //    if ($_POST["emailUtilisateur" ]=="ken@gmail.com" and $_POST["motDePasseUtilisateur"]=="nado32")
            {
             $file = "{$base_dir}Vue{$ds}dashboard.php";
             header($file);
@@ -33,6 +45,31 @@ class AuthController
         $base_dir = realpath(dirname(__FILE__)  . $ds . '..') . $ds ;
         $file = "{$base_dir}Vue{$ds}inscription.php";
         include($file);
+
+
+        if ($_SERVER["REQUEST_METHOD"]=="POST")
+        {
+            $nom=$_POST["NomUtilisateur" ];
+            $email=$_POST["EmailUtilisateur"];
+            $pwd1=password_hash($_POST["pwd1"],PASSWORD_DEFAULT,['cost' => 12] ) ;
+            $pwd2=password_hash($_POST["pwd2"],PASSWORD_DEFAULT,['cost' => 12]);
+
+            
+            if ($this->user->search($email))
+            {
+                echo "<div class='alert alert-danger'> Ce compte existe déja !</div>";
+            }
+
+           if ($_POST["pwd1"]!=$_POST["pwd2"])
+           {
+            echo "<div class='alert alert-danger'> Mot de passe incorrect !</div>";
+           }
+           else{
+            $this->user->create($nom,$email,$pwd1);
+           header("Location:/dashboard");
+           }
+
+        }
 
     }
 
